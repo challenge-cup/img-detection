@@ -24,6 +24,12 @@ private:
     cv::Mat cur_img;
     bool new_image = false;
     bool correct_image = false;
+    int true_count = 0;   //检测到的次数，用于延迟画方框，不至于太抖
+    int rect_flash_frq = 3;
+
+    std::vector<cv::Rect> bounding_box;
+
+
     imgDetection imgDetector;
 
 public:

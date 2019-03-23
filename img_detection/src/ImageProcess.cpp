@@ -2,21 +2,29 @@
 
 void ImageProcess::img_loop(){
     while(1)    {
+        
         if(new_image)   {
 
             cv::Mat res_img = cur_img.clone();
             ParamQuad paramQuad(std::vector<cv::Rect>{}, false);
             imgDetector.quadDetection(cur_img, paramQuad);      //得到是否有想要的数字，需输入牌子的方向
-            if (paramQuad.state == true)	{
-                cout << "find quadrotor!" << endl;
+            
+            if (paramQuad.state == true)    {
+                if ( true_count == 0 )   {
+                    bounding_box = paramQuad.bounding_box;
+                }
+                if( ++true_count == rect_flash_frq ) {
+                    true_count = 0;
+                }
 
-                
-                std::vector<cv::Rect> bounding_box = paramQuad.bounding_box;
                 for (auto iter = bounding_box.begin(); iter != bounding_box.end(); iter++)	{
                     cv::rectangle(cur_img, *iter, cv::Scalar(171, 90, 0), 3, 1, 0);
                     imgDetector.addSign(cur_img, res_img, 
-                                        cv::Point(iter->x + iter->width / 2, iter->y + iter->height) );  //画上感叹号
+                    cv::Point(iter->x + iter->width / 2, iter->y + iter->height) );  //画上感叹号
                 }
+
+
+ 
             }
             cv::imshow("showImg", res_img);
             cv::waitKey(1);
