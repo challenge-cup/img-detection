@@ -1,0 +1,5 @@
+<launch>   
+    <node name="detector" type="detector" pkg="img_detection" output="screen">
+        <remap from="/forwardimg" to="/usb_cam/image_raw"/>
+    </node>
+</launch>
